@@ -80,7 +80,7 @@
     <!-- Audio Background -->
     <!-- Catatan: Pastikan link ini mengarah ke direct file .mp3 agar bisa terputar otomatis di browser -->
     <audio id="bg-music" loop>
-        <source src="https://jumpshare.com/share/PEyzM05eJAGSUSjTZeID" type="audio/mpeg">
+        <source src="https://drive.google.com/uc?export=download&id=1TY2EuqK2ofIaS5NnOzBp1jSaYpHX_rN_" type="audio/mpeg">
     </audio>
 
     <!-- Header / Hero Section -->
@@ -178,21 +178,22 @@
 
     <!-- Section Video -->
     <section class="max-w-4xl mx-auto px-6 py-12 text-center bg-blue-50 rounded-3xl shadow-inner mb-16 relative overflow-hidden border-2 border-blue-100">
-        <h3 class="font-cute text-3xl text-blue-600 mb-2">Ucapan dari Kami 🎬</h3>
-        <p class="text-gray-500 mb-8 text-sm">Video akan berputar otomatis. Musik latar akan meredup sejenak.</p>
+        <h3 class="font-cute text-3xl text-blue-600 mb-2">Kenangan Manis Bersama 🎬</h3>
+        <p class="text-gray-500 mb-6 text-sm">Video dapat diputar secara manual. Silakan klik tombol di bawah untuk menjeda musik latar saat menonton.</p>
         
-        <div class="relative w-full pb-[56.25%] h-0 rounded-2xl overflow-hidden shadow-2xl bg-black mb-8 border-4 border-white">
-            <!-- GANTI atribut "src" di bawah ini dengan link video direct (format .mp4) -->
-            <video id="special-video" class="absolute top-0 left-0 w-full h-full object-cover" controls preload="metadata">
-                <!-- Contoh video placeholder, ganti dengan link hosting Anda -->
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-clouds-and-blue-sky-2408-large.mp4" type="video/mp4">
-                Maaf, browser Anda tidak mendukung pemutaran video ini.
-            </video>
+        <!-- Tombol Manual Jeda Musik -->
+        <button id="toggle-music-btn" class="mb-6 inline-flex items-center gap-2 font-cute bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-full text-md shadow transition transform hover:scale-105">
+            🔇 Jeda Musik Latar
+        </button>
+
+        <div class="relative w-full max-w-sm mx-auto aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl bg-black mb-8 border-4 border-white">
+            <!-- Menggunakan Iframe Google Drive Preview -->
+            <iframe src="https://drive.google.com/file/d/1Z6TomrwcAy1Usvbn543-ybwIeUZdY-WU/preview" class="absolute top-0 left-0 w-full h-full border-0" allow="autoplay" allowfullscreen></iframe>
         </div>
 
         <!-- Tombol Unduh Google Drive -->
         <!-- GANTI "href" dengan link Google Drive tempat video disimpan -->
-        <a href="LINK_GOOGLE_DRIVE_ANDA_DISINI" target="_blank" class="inline-flex items-center gap-2 font-cute bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full text-lg shadow-lg transition transform hover:-translate-y-1">
+        <a href="https://drive.google.com/file/d/1Z6TomrwcAy1Usvbn543-ybwIeUZdY-WU/view?usp=sharing" target="_blank" class="inline-flex items-center gap-2 font-cute bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full text-lg shadow-lg transition transform hover:-translate-y-1">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
@@ -202,7 +203,7 @@
 
     <!-- Section Galeri Foto -->
     <section class="max-w-5xl mx-auto px-6 py-12 mb-16">
-        <h3 class="font-cute text-4xl text-center text-pink-500 mb-10">Potret Kebersamaan Kita 📸</h3>
+        <h3 class="font-cute text-4xl text-center text-pink-500 mb-10">Ucapan Doa dari Kami 📸</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             <!-- Foto 1 -->
             <div class="polaroid">
@@ -257,10 +258,26 @@
             const btnOpen = document.getElementById('btn-open');
             const welcomeScreen = document.getElementById('welcome-screen');
             const bgMusic = document.getElementById('bg-music');
-            const specialVideo = document.getElementById('special-video');
 
             // Set volume awal
             bgMusic.volume = 0.4;
+            
+            const btnToggleMusic = document.getElementById('toggle-music-btn');
+            if (btnToggleMusic) {
+                btnToggleMusic.addEventListener('click', () => {
+                    if (bgMusic.paused) {
+                        safePlay(bgMusic);
+                        btnToggleMusic.innerHTML = '🔇 Jeda Musik Latar';
+                        btnToggleMusic.classList.replace('bg-green-500', 'bg-pink-500');
+                        btnToggleMusic.classList.replace('hover:bg-green-600', 'hover:bg-pink-600');
+                    } else {
+                        bgMusic.pause();
+                        btnToggleMusic.innerHTML = '🔊 Putar Musik Latar';
+                        btnToggleMusic.classList.replace('bg-pink-500', 'bg-green-500');
+                        btnToggleMusic.classList.replace('hover:bg-pink-600', 'hover:bg-green-600');
+                    }
+                });
+            }
 
             // --- DATA & LOGIKA KARTU DOA ---
             const prayers = [
@@ -391,41 +408,6 @@
                 safePlay(bgMusic);
             });
 
-            // Logika Video & Audio Background dengan IntersectionObserver
-            const videoObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // Jika video masuk ke layar, putar video & pause audio bg
-                        safePlay(specialVideo);
-                        bgMusic.pause();
-                    } else {
-                        // Jika video keluar dari layar, pause video & play audio bg
-                        if (!specialVideo.paused) {
-                            specialVideo.pause();
-                        }
-                        // Pastikan welcome screen sudah tidak ada baru play lagu kembali
-                        if(welcomeScreen.style.display === 'none') {
-                            safePlay(bgMusic);
-                        }
-                    }
-                });
-            }, { 
-                threshold: 0.5 // Memicu efek ketika 50% bagian video terlihat di layar
-            });
-
-            videoObserver.observe(specialVideo);
-
-            // Logika tambahan jika user mem-pause video secara manual
-            specialVideo.addEventListener('play', () => {
-                bgMusic.pause();
-            });
-
-            specialVideo.addEventListener('pause', () => {
-                // Jika video di-pause manual dan layar pembuka sudah hilang, hidupkan musik latar
-                if(welcomeScreen.style.display === 'none') {
-                    safePlay(bgMusic);
-                }
-            });
         });
     </script>
 </body>
