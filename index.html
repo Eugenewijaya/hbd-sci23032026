@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Ulang Tahun, Ibu Anastasia! 🎉</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Fredoka:wght@300..700&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #fffaf0;
+            overflow-x: hidden;
+        }
+        .font-cute { font-family: 'Fredoka', sans-serif; }
+        .font-handwriting { font-family: 'Caveat', cursive; }
+        
+        /* Cloud Animation */
+        @keyframes floatCloud {
+            0% { transform: translateX(-10vw); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateX(110vw); opacity: 0; }
+        }
+        .cloud-1 { animation: floatCloud 25s linear infinite; top: 10%; width: 120px; }
+        .cloud-2 { animation: floatCloud 35s linear infinite 5s; top: 25%; width: 160px; }
+        .cloud-3 { animation: floatCloud 40s linear infinite 15s; top: 15%; width: 100px; }
+        
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .floating { animation: float 4s ease-in-out infinite; }
+        
+        /* Polaroid effect for gallery */
+        .polaroid {
+            background: white;
+            padding: 10px 10px 40px 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: rotate(-2deg);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .polaroid:nth-child(even) { transform: rotate(3deg); }
+        .polaroid:hover {
+            transform: scale(1.05) rotate(0deg);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        /* City & Garden Silhouette */
+        .city-bg {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 200' preserveAspectRatio='none'%3E%3Cpath fill='%23a1a1aa' d='M0,200 L0,150 L50,150 L50,80 L100,80 L100,120 L150,120 L150,60 L200,60 L200,140 L250,140 L250,90 L300,90 L300,40 L350,40 L350,130 L400,130 L400,70 L450,70 L450,110 L500,110 L500,50 L550,50 L550,160 L600,160 L600,80 L650,80 L650,120 L700,120 L700,30 L750,30 L750,140 L800,140 L800,90 L850,90 L850,60 L900,60 L900,150 L950,150 L950,100 L1000,100 L1000,200 Z'/%3E%3C/svg%3E");
+            background-repeat: repeat-x;
+            background-size: contain;
+            background-position: bottom;
+        }
+        .garden-bg {
+            background: linear-gradient(to bottom, #86efac, #22c55e);
+            border-top-left-radius: 50% 20px;
+            border-top-right-radius: 50% 20px;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased">
+
+    <!-- Overlay Pembuka (Agar audio bisa autoplay) -->
+    <div id="welcome-screen" class="fixed inset-0 bg-pink-100 z-50 flex flex-col items-center justify-center transition-opacity duration-1000">
+        <div class="text-6xl mb-6 floating">💌</div>
+        <h2 class="font-cute text-3xl text-pink-600 mb-8 text-center px-4">Ada pesan spesial untuk Ibu Anas...</h2>
+        <button id="btn-open" class="font-cute bg-pink-500 hover:bg-pink-600 text-white text-xl px-8 py-4 rounded-full shadow-lg transform transition hover:scale-105">
+            Buka Ucapan ✨
+        </button>
+    </div>
+
+    <!-- Audio Background -->
+    <!-- Anda bisa mengganti link src dengan lagu yang Anda inginkan -->
+    <audio id="bg-music" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-relaxing-light-piano-248.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Header / Hero Section -->
+    <header class="relative h-[80vh] md:h-screen bg-gradient-to-b from-blue-300 via-blue-200 to-yellow-100 overflow-hidden flex flex-col items-center justify-center">
+        
+        <!-- Awan SVG -->
+        <svg class="absolute cloud-1 opacity-80" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 19C19.9853 19 22 16.9853 22 14.5C22 12.1325 20.177 10.2023 17.8546 10.0143C17.2917 6.62144 14.3404 4 10.8333 4C6.50711 4 3 7.50711 3 11.8333C3 12.0163 3.00628 12.1979 3.01858 12.3778C1.8492 13.0645 1 14.3792 1 15.9167C1 18.1718 2.82817 20 5.08333 20L17.5 20V19Z"/></svg>
+        <svg class="absolute cloud-2 opacity-90" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 19C19.9853 19 22 16.9853 22 14.5C22 12.1325 20.177 10.2023 17.8546 10.0143C17.2917 6.62144 14.3404 4 10.8333 4C6.50711 4 3 7.50711 3 11.8333C3 12.0163 3.00628 12.1979 3.01858 12.3778C1.8492 13.0645 1 14.3792 1 15.9167C1 18.1718 2.82817 20 5.08333 20L17.5 20V19Z"/></svg>
+        <svg class="absolute cloud-3 opacity-70" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 19C19.9853 19 22 16.9853 22 14.5C22 12.1325 20.177 10.2023 17.8546 10.0143C17.2917 6.62144 14.3404 4 10.8333 4C6.50711 4 3 7.50711 3 11.8333C3 12.0163 3.00628 12.1979 3.01858 12.3778C1.8492 13.0645 1 14.3792 1 15.9167C1 18.1718 2.82817 20 5.08333 20L17.5 20V19Z"/></svg>
+
+        <!-- Teks Utama -->
+        <div class="z-20 text-center px-4 mt-[-10vh] floating">
+            <h1 class="font-cute text-5xl md:text-7xl text-pink-500 drop-shadow-lg mb-2">Selamat Ulang Tahun</h1>
+            <h2 class="font-cute text-6xl md:text-8xl text-purple-600 drop-shadow-xl">Ibu Anas! 🎉</h2>
+        </div>
+
+        <!-- Siluet Kota -->
+        <div class="absolute bottom-16 w-full h-32 md:h-48 city-bg opacity-30 z-0"></div>
+
+        <!-- Nuansa Taman Binatang (Foreground) -->
+        <div class="absolute bottom-0 w-full h-24 garden-bg z-10 flex justify-center items-end pb-2 overflow-hidden shadow-[0_-10px_20px_rgba(0,0,0,0.1)]">
+            <div class="flex space-x-4 md:space-x-12 text-4xl md:text-6xl drop-shadow-md pb-4">
+                🦒 🐘 🌿 🦓 🌳 🦁 🐼 🌷
+            </div>
+        </div>
+    </header>
+
+    <!-- Section Ucapan Utama -->
+    <section class="max-w-4xl mx-auto px-6 py-16 text-center md:text-lg leading-relaxed relative z-20">
+        <div class="bg-white rounded-3xl p-8 md:p-12 shadow-2xl relative border-4 border-pink-100">
+            <!-- Dekorasi Kertas -->
+            <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-5xl">🎂</div>
+            
+            <p class="mb-6 font-semibold text-gray-700">Dengan penuh rasa hormat, kami segenap tim Star Champs mengucapkan:</p>
+            <h3 class="font-cute text-3xl text-pink-500 mb-8">Selamat ulang tahun, Ibu Anas. 🎉</h3>
+            
+            <p class="mb-4">Hari ini menjadi momen yang bermakna bagi kami untuk menyampaikan apresiasi atas kepemimpinan, dedikasi, dan komitmen Ibu dalam membangun dan mengembangkan Star Champs hingga menjadi tempat yang berdampak bagi banyak keluarga.</p>
+            
+            <p class="mb-4">Di bawah arahan Ibu, Star Champs tidak hanya bertumbuh sebagai sebuah institusi, tetapi juga menjadi ruang yang menghadirkan harapan—khususnya bagi para orang tua yang sedang mendampingi proses tumbuh kembang anak-anak mereka. Nilai kepedulian, kesabaran, dan ketulusan yang Ibu tanamkan menjadi fondasi yang terus kami pegang dalam setiap pelayanan.</p>
+            
+            <p class="mb-10">Kami mendoakan agar Ibu senantiasa diberikan kesehatan, kekuatan, dan kebijaksanaan dalam menjalankan setiap tanggung jawab. Semoga setiap langkah Ibu ke depan senantiasa diberkati dan membawa dampak yang lebih luas.</p>
+
+            <!-- Ayat Firman Tuhan -->
+            <div class="bg-yellow-50 rounded-2xl p-6 mb-10 border border-yellow-200 shadow-inner">
+                <span class="text-3xl">✨</span>
+                <p class="font-handwriting text-2xl md:text-3xl text-yellow-700 my-4 leading-relaxed">
+                    “Segala perkara dapat kutanggung di dalam Dia yang memberi kekuatan kepadaku.”
+                </p>
+                <p class="font-semibold text-yellow-800">— Filipi 4:13</p>
+            </div>
+
+            <p class="mb-4 italic text-gray-600">Kiranya firman ini menjadi penguat dan penyertaan dalam setiap peran dan tanggung jawab yang Ibu jalankan.</p>
+            
+            <p class="mb-4">Kami juga menyampaikan terima kasih atas kepercayaan, arahan, dan dukungan yang telah Ibu berikan kepada kami sebagai tim. Merupakan suatu kebanggaan bagi kami dapat bertumbuh dan berkontribusi bersama di bawah kepemimpinan Ibu.</p>
+            
+            <p class="mb-8 font-medium">Semoga Star Champs terus berkembang dan memberikan manfaat yang semakin besar bagi masyarakat.</p>
+
+            <h4 class="font-cute text-2xl text-purple-600 mb-2">Sekali lagi, selamat ulang tahun, Ibu Anas.</h4>
+            <p class="font-semibold text-pink-500">Semoga senantiasa sehat, diberkati, dan terus menginspirasi. 💖</p>
+        </div>
+    </section>
+
+    <!-- Section Video -->
+    <section class="max-w-4xl mx-auto px-6 py-12 text-center bg-blue-50 rounded-3xl shadow-inner mb-16 relative overflow-hidden border-2 border-blue-100">
+        <h3 class="font-cute text-3xl text-blue-600 mb-2">Kenangan Manis Bersama 🎬</h3>
+        <p class="text-gray-500 mb-8 text-sm">Video akan berputar otomatis. Musik latar akan meredup sejenak.</p>
+        
+        <div class="relative w-full pb-[56.25%] h-0 rounded-2xl overflow-hidden shadow-2xl bg-black mb-8 border-4 border-white">
+            <!-- GANTI atribut "src" di bawah ini dengan link video direct (format .mp4) -->
+            <video id="special-video" class="absolute top-0 left-0 w-full h-full object-cover" controls preload="metadata">
+                <!-- Contoh video placeholder, ganti dengan link hosting Anda -->
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-clouds-and-blue-sky-2408-large.mp4" type="video/mp4">
+                Maaf, browser Anda tidak mendukung pemutaran video ini.
+            </video>
+        </div>
+
+        <!-- Tombol Unduh Google Drive -->
+        <!-- GANTI "href" dengan link Google Drive tempat video disimpan -->
+        <a href="LINK_GOOGLE_DRIVE_ANDA_DISINI" target="_blank" class="inline-flex items-center gap-2 font-cute bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full text-lg shadow-lg transition transform hover:-translate-y-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Unduh Video (Google Drive)
+        </a>
+    </section>
+
+    <!-- Section Galeri Foto -->
+    <section class="max-w-5xl mx-auto px-6 py-12 mb-16">
+        <h3 class="font-cute text-4xl text-center text-pink-500 mb-10">Potret Kebersamaan Kita 📸</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            <!-- Foto 1 -->
+            <div class="polaroid">
+                <img src="https://i.ibb.co.com/tTWwYFc8/DSCF0477.jpg" alt="Memory 1" class="w-full h-40 md:h-48 object-cover rounded">
+            </div>
+            <!-- Foto 2 -->
+            <div class="polaroid">
+                <img src="https://i.ibb.co.com/4ZWXzp0N/DSCF0504.jpg" alt="Memory 2" class="w-full h-40 md:h-48 object-cover rounded">
+            </div>
+            <!-- Foto 3 -->
+            <div class="polaroid">
+                <img src="https://i.ibb.co.com/mj75RfG/IMG-20250810-065702-112.jpg" alt="Memory 3" class="w-full h-40 md:h-48 object-cover rounded">
+            </div>
+            <!-- Foto 4 -->
+            <div class="polaroid">
+                <img src="https://i.ibb.co.com/m5xZw9jm/IMG-20250810-065704-340.jpg" alt="Memory 4" class="w-full h-40 md:h-48 object-cover rounded">
+            </div>
+            <!-- Foto 5 -->
+            <div class="polaroid">
+                <img src="https://i.ibb.co.com/G4fVtgd5/Whats-App-Image-2026-03-23-at-16-23-32-1.jpg" alt="Memory 5" class="w-full h-40 md:h-48 object-cover rounded">
+            </div>
+            <!-- Foto 6 -->
+            <div class="polaroid">
+                <img src="https://i.ibb.co.com/6RZr6LyK/Whats-App-Image-2026-03-23-at-16-23-35.jpg" alt="Memory 6" class="w-full h-40 md:h-48 object-cover rounded">
+            </div>
+            <!-- Foto 7 -->
+            <div class="polaroid">
+                <img src="https://i.ibb.co.com/TD5jJBb5/Whats-App-Image-2026-03-23-at-16-23-34-1.jpg" alt="Memory 7" class="w-full h-40 md:h-48 object-cover rounded">
+            </div>
+            <!-- Foto 8 -->
+            <div class="polaroid">
+                <img src="https://i.ibb.co.com/B23shQCQ/Whats-App-Image-2026-03-23-at-16-23-34.jpg" alt="Memory 8" class="w-full h-40 md:h-48 object-cover rounded">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Pesan Penutup Tim -->
+    <footer class="bg-gradient-to-t from-pink-200 to-white pt-16 pb-12 text-center px-6">
+        <div class="max-w-3xl mx-auto">
+            <h3 class="font-handwriting text-4xl md:text-5xl text-pink-600 mb-6 leading-relaxed">
+                "Terima kasih telah menjadi lebih dari sekadar atasan, tetapi juga mentor dan keluarga bagi kami. Kasih, dedikasi, dan teladan Ibu akan selalu menjadi cahaya yang membimbing langkah kami di Star Champs."
+            </h3>
+            <div class="text-3xl mb-4">💐✨🫶</div>
+            <p class="font-cute text-2xl text-purple-700">Kami menyayangi Ibu Anas!</p>
+            <p class="font-bold text-gray-500 mt-2">— Dari kami yang selalu mendukungmu, Tim Star Champs Indonesia</p>
+        </div>
+    </footer>
+
+    <!-- Logic Javascript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const btnOpen = document.getElementById('btn-open');
+            const welcomeScreen = document.getElementById('welcome-screen');
+            const bgMusic = document.getElementById('bg-music');
+            const specialVideo = document.getElementById('special-video');
+
+            // Set volume awal
+            bgMusic.volume = 0.4;
+
+            // Helper function untuk menghindari Unhandled Rejection (AbortError)
+            const safePlay = (media) => {
+                const playPromise = media.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        // Mengabaikan AbortError yang wajar terjadi jika dipotong pause()
+                        if (error.name !== 'AbortError') {
+                            console.log("Error pemutaran media:", error);
+                        }
+                    });
+                }
+            };
+
+            // Logika Pembuka & Play Audio
+            btnOpen.addEventListener('click', () => {
+                // Sembunyikan layar utama
+                welcomeScreen.style.opacity = '0';
+                setTimeout(() => {
+                    welcomeScreen.style.display = 'none';
+                }, 1000);
+
+                // Play music
+                safePlay(bgMusic);
+            });
+
+            // Logika Video & Audio Background dengan IntersectionObserver
+            const videoObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Jika video masuk ke layar, putar video & pause audio bg
+                        safePlay(specialVideo);
+                        bgMusic.pause();
+                    } else {
+                        // Jika video keluar dari layar, pause video & play audio bg
+                        if (!specialVideo.paused) {
+                            specialVideo.pause();
+                        }
+                        // Pastikan welcome screen sudah tidak ada baru play lagu kembali
+                        if(welcomeScreen.style.display === 'none') {
+                            safePlay(bgMusic);
+                        }
+                    }
+                });
+            }, { 
+                threshold: 0.5 // Memicu efek ketika 50% bagian video terlihat di layar
+            });
+
+            videoObserver.observe(specialVideo);
+
+            // Logika tambahan jika user mem-pause video secara manual
+            specialVideo.addEventListener('play', () => {
+                bgMusic.pause();
+            });
+
+            specialVideo.addEventListener('pause', () => {
+                // Jika video di-pause manual dan layar pembuka sudah hilang, hidupkan musik latar
+                if(welcomeScreen.style.display === 'none') {
+                    safePlay(bgMusic);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
