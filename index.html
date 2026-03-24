@@ -6,6 +6,10 @@
     <title>Selamat Ulang Tahun, Ibu Anastasia! 🎉</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Fredoka:wght@300..700&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    
+    <!-- Tambahan script Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <style>
         body {
             font-family: 'Quicksand', sans-serif;
@@ -74,9 +78,9 @@
     </div>
 
     <!-- Audio Background -->
-    <!-- Anda bisa mengganti link src dengan lagu yang Anda inginkan -->
+    <!-- Catatan: Pastikan link ini mengarah ke direct file .mp3 agar bisa terputar otomatis di browser -->
     <audio id="bg-music" loop>
-        <source src="https://assets.mixkit.co/music/preview/mixkit-relaxing-light-piano-248.mp3" type="audio/mpeg">
+        <source src="https://jumpshare.com/share/PEyzM05eJAGSUSjTZeID" type="audio/mpeg">
     </audio>
 
     <!-- Header / Hero Section -->
@@ -138,6 +142,39 @@
             <p class="font-semibold text-pink-500">Semoga senantiasa sehat, diberkati, dan terus menginspirasi. 💖</p>
         </div>
     </section>
+
+    <!-- Section Kartu Doa dari Tim -->
+    <section class="max-w-5xl mx-auto px-6 py-12 mb-16 relative z-20">
+        <h3 class="font-cute text-4xl text-center text-pink-500 mb-2">Doa & Harapan Kami 💌</h3>
+        <p class="text-center text-gray-500 mb-10 text-sm">Ketuk kartu untuk membaca pesan doa dari masing-masing kami</p>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4" id="prayer-cards-container">
+            <!-- Kartu akan di-generate oleh JavaScript -->
+        </div>
+    </section>
+
+    <!-- Modal Doa (Pop-up) -->
+    <div id="prayer-modal" class="fixed inset-0 z-[100] hidden bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-white rounded-3xl p-8 max-w-lg w-full relative shadow-2xl transform scale-95 transition-all duration-300" id="prayer-modal-content">
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-pink-500 text-3xl font-bold">&times;</button>
+            
+            <div class="text-center">
+                <div class="text-5xl mb-4">💌</div>
+                <h4 id="modal-name" class="font-cute text-3xl text-pink-500 mb-4 transition-opacity duration-300">Nama</h4>
+                <p id="modal-message" class="font-handwriting text-2xl md:text-3xl text-gray-700 leading-relaxed mb-8 transition-opacity duration-300">Pesan doa di sini...</p>
+                
+                <div class="flex justify-between items-center mt-6 border-t pt-4">
+                    <button id="prev-prayer" class="text-pink-500 font-bold hover:text-pink-700 flex items-center gap-1 transition-transform hover:-translate-x-1">
+                        &larr; <span class="text-sm">Sebelumnya</span>
+                    </button>
+                    <span id="prayer-counter" class="text-sm text-gray-400">1 / 11</span>
+                    <button id="next-prayer" class="text-pink-500 font-bold hover:text-pink-700 flex items-center gap-1 transition-transform hover:translate-x-1">
+                        <span class="text-sm">Selanjutnya</span> &rarr;
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Section Video -->
     <section class="max-w-4xl mx-auto px-6 py-12 text-center bg-blue-50 rounded-3xl shadow-inner mb-16 relative overflow-hidden border-2 border-blue-100">
@@ -225,6 +262,101 @@
             // Set volume awal
             bgMusic.volume = 0.4;
 
+            // --- DATA & LOGIKA KARTU DOA ---
+            const prayers = [
+                { name: "Evid", message: "Selamat ulang tahun Ibu Anas! Semoga Tuhan selalu memberikan kesehatan, kebahagiaan, dan kelancaran dalam setiap urusan Ibu." },
+                { name: "Rizka", message: "Happy Birthday Ibu! Terima kasih atas bimbingan dan kesabarannya selama ini. Semoga doa-doa terbaik Ibu segera terkabul." },
+                { name: "Emma", message: "Selamat bertambah usia, Ibu Anas yang luar biasa. Teruslah menjadi inspirasi bagi kami semua di Star Champs. God bless you!" },
+                { name: "Yessika", message: "Selamat ulang tahun Ibu Anas sayang! Semoga hari-harinya selalu dipenuhi suka cita, damai sejahtera, dan berkat yang melimpah." },
+                { name: "Gaby", message: "Happy birthday Ibu! Sukses selalu untuk karir dan keluarga. Kami sangat bersyukur memiliki sosok pemimpin seperti Ibu." },
+                { name: "Aa daus", message: "Barakallah fii umrik Ibu Anas. Semoga panjang umur, sehat selalu, dan senantiasa dalam lindungan-Nya. Amin." },
+                { name: "Teh Bila", message: "Selamat ulang tahun Ibu! Semoga kebahagiaan selalu menyertai langkah Ibu. Terima kasih sudah menjadi teladan yang baik untuk kami." },
+                { name: "Teh Yana", message: "Happy Milad Ibu Anas! Semoga Allah SWT selalu melimpahkan rahmat, rezeki yang berkah, dan kesehatan untuk Ibu beserta keluarga." },
+                { name: "Nathan", message: "Selamat ulang tahun Ibu Anas. Semoga tahun ini membawa banyak pencapaian baru dan kebahagiaan yang tak terhingga." },
+                { name: "Regina", message: "Happy birthday, Ibu! Doa terbaik untuk Ibu, semoga selalu kuat, bijaksana, dan terus membawa Star Champs semakin maju." },
+                { name: "Maria", message: "Selamat ulang tahun Ibu Anas. Kiranya kasih karunia Tuhan selalu menyertai kehidupan Ibu dan keluarga. We love you!" }
+            ];
+
+            let currentPrayerIndex = 0;
+
+            const container = document.getElementById('prayer-cards-container');
+            if (container) {
+                prayers.forEach((prayer, index) => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white/90 backdrop-blur-sm p-4 rounded-2xl shadow-md border-2 border-pink-100 cursor-pointer transform transition duration-300 hover:-translate-y-2 hover:shadow-xl flex flex-col items-center justify-center text-center floating";
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    card.innerHTML = `
+                        <span class="text-3xl mb-2">✉️</span>
+                        <span class="font-cute text-lg text-pink-600">${prayer.name}</span>
+                    `;
+                    card.addEventListener('click', () => openModal(index));
+                    container.appendChild(card);
+                });
+            }
+
+            const modal = document.getElementById('prayer-modal');
+            const modalContent = document.getElementById('prayer-modal-content');
+            const modalName = document.getElementById('modal-name');
+            const modalMessage = document.getElementById('modal-message');
+            const prayerCounter = document.getElementById('prayer-counter');
+            const btnCloseModal = document.getElementById('close-modal');
+            const btnPrev = document.getElementById('prev-prayer');
+            const btnNext = document.getElementById('next-prayer');
+
+            const updateModal = (index) => {
+                modalMessage.style.opacity = 0;
+                modalName.style.opacity = 0;
+                
+                setTimeout(() => {
+                    modalName.innerText = "Dari: " + prayers[index].name;
+                    modalMessage.innerText = '"' + prayers[index].message + '"';
+                    prayerCounter.innerText = `${index + 1} / ${prayers.length}`;
+                    
+                    modalMessage.style.opacity = 1;
+                    modalName.style.opacity = 1;
+                }, 200);
+            };
+
+            const openModal = (index) => {
+                currentPrayerIndex = index;
+                updateModal(index);
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modalContent.classList.remove('scale-95');
+                    modalContent.classList.add('scale-100');
+                }, 10);
+            };
+
+            const closeModal = () => {
+                modalContent.classList.remove('scale-100');
+                modalContent.classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            };
+
+            if (btnCloseModal) btnCloseModal.addEventListener('click', closeModal);
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if(e.target === modal) closeModal();
+                });
+            }
+
+            if (btnPrev) {
+                btnPrev.addEventListener('click', () => {
+                    currentPrayerIndex = (currentPrayerIndex - 1 + prayers.length) % prayers.length;
+                    updateModal(currentPrayerIndex);
+                });
+            }
+
+            if (btnNext) {
+                btnNext.addEventListener('click', () => {
+                    currentPrayerIndex = (currentPrayerIndex + 1) % prayers.length;
+                    updateModal(currentPrayerIndex);
+                });
+            }
+            // --- END LOGIKA KARTU DOA ---
+
             // Helper function untuk menghindari Unhandled Rejection (AbortError)
             const safePlay = (media) => {
                 const playPromise = media.play();
@@ -240,6 +372,15 @@
 
             // Logika Pembuka & Play Audio
             btnOpen.addEventListener('click', () => {
+                // Tembakkan Confetti
+                confetti({
+                    particleCount: 150,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#ff69b4', '#8a2be2', '#ffd700', '#00ff00', '#ff4500'],
+                    zIndex: 1000
+                });
+
                 // Sembunyikan layar utama
                 welcomeScreen.style.opacity = '0';
                 setTimeout(() => {
